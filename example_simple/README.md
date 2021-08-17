@@ -14,7 +14,7 @@ oc apply -f example_simple/pipeline.yaml
 oc apply -f example_simple/pipeline_resource.yaml 
 ```
 
-### Create a Task
+### Create Task
 
 <b>Definition</b>: A `Task` is an individual job and defines a set of build steps such as compiling code, running tests, and building and deploying images.
 
@@ -43,7 +43,7 @@ You can apply the above Task to the OpenShift cluster by running the following c
 ```
 oc apply -f example_simple/task.yaml 
 ```
-### Create a Pipeline
+### Create Pipeline
 
 <b>Definition</b>: `Pipeline` describes a list of tasks that compose a pipeline.
 
