@@ -12,6 +12,7 @@ Run the following commands on your OpenShift cluster to run this repository.
 oc apply -f example_simple/task.yaml 
 oc apply -f example_simple/pipeline.yaml 
 oc apply -f example_simple/pipeline_resource.yaml 
+tkn pipeline start count --showlog
 ```
 
 ### Create Task
