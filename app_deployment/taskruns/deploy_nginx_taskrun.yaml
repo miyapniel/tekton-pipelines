@@ -1,0 +1,14 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: deploy-nginx-multistep-run
+spec:
+  taskRef:
+    name: deploy-config-multistep
+  params:
+    - name: s3_bucket
+      value: "https://miya-config.s3.amazonaws.com"
+    - name: path_to_deployment_file
+      value: "nginx_public.yaml"
+    - name: mount_path
+      value: "/mnt/app/nginx_public.yaml"

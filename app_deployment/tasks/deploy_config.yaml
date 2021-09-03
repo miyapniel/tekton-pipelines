@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-config-multistep
+spec:
+  params:
+    - name: s3_bucket
+      type: string
+    - name: path_to_deployment_file
+      type: string
+    - name: mount_path
+      type: string
+  volumes:
+    - name: vol
+      emptyDir: {}
+  steps:
+    - name: get-dependencies
+      image: image-registry.openshift-image-registry.svc:5000/tekton-pipelines/oc@sha256:73cc4494baa24a5c023328690a56c2c15c9eefa97ca28163c5a93014c6f5c0d6
+      volumeMounts:
+        - name: vol
+          mountPath: /mnt/app
+      command: ["/bin/sh"]
+      args: ["-c", "curl -L $(params.s3_bucket)/$(params.path_to_deployment_file) -o $(params.mount_path)"]
+    - name: deploy
+      image: image-registry.openshift-image-registry.svc:5000/tekton-pipelines/oc@sha256:73cc4494baa24a5c023328690a56c2c15c9eefa97ca28163c5a93014c6f5c0d6
+      volumeMounts:
+        - name: vol
+          mountPath: /mnt/app
+      env:
+        - name: MOUNT_PATH
+          value: $(params.mount_path)
+      script: |
+        #!/usr/bin/env sh
+        set -e
+
+        # Login and apply template
+        oc login --server=https://api.arctic.scp.labs.automationlogic.com:6443 --username="kubeadmin" --password="gdt5L-TUDaZ-Z9e6Z-MGQRQ" --insecure-skip-tls-verify
+        oc apply -f ${MOUNT_PATH}
